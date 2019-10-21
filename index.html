@@ -1,19 +1,4 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-	<meta charset="UTF-8">
-	<title>Icecream Man</title>
-	<link rel="stylesheet" href="./css/index.css">
-</head>
-<body>
-	<p id="startLat"></p>
-	<p id="startLon"></p>
-
-	<script type="text/javascript" src="./js/index.js"></script>
-</body>
-</html>
-
-<!-- <!DOCTYPE html>
 <html>
   <head>
     <title>Geolocation</title>
@@ -35,6 +20,7 @@
     </style>
   </head>
   <body>
+    <div id="places"></div>
     <div id="map"></div>
     <script>
       // Note: This example requires that you consent to location sharing when
@@ -45,7 +31,87 @@
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 41.8781, lng: -87.6298},
-          zoom: 9
+					zoom: 20,
+					styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ]
         });
 				infoWindow = new google.maps.InfoWindow;
 				
@@ -58,23 +124,163 @@
               lat: position.coords.latitude,
               lng: position.coords.longitude
 						};
-						
-						var marker = new google.maps.Marker({
-							position: {lat: 41.8781, lng: -87.6298}, 
-							map: map, 
-							title: 'Marker is here'
-						})
+            var curPos = new google.maps.LatLng(pos.lat, pos.lng);
 
+            var request = {
+              location: curPos,
+              radius: '100',
+              query: "ice cream"
+						};
 						
+						function createMarkers(places) {
+              console.log(places[0]);
+							var bounds = new google.maps.LatLngBounds();
+							var placesList = document.getElementById('places');
 
+							for (var i = 0, place; place = places[i]; i++) {
+								var image = {
+									url: "https://www.cfacdn.com/img/order/COM/Menu_Refresh/Drinks/Drinks%20PDP/_0000s_0027_%5BFeed%5D_0006s_0013_Drinks_Ice-Dream.png",
+									size: new google.maps.Size(100, 100),
+									origin: new google.maps.Point(0, 0),
+									anchor: new google.maps.Point(17, 34),
+									scaledSize: new google.maps.Size(50, 50)
+								};
+
+                var infoWindowContent = '<div class="info_content">' +
+									`<h3>${place.name}</h3>` + `<p>${place.formatted_address}</p>` + 
+									'</div>';
+
+								var marker = new google.maps.Marker({
+									map: zoomedMap,
+									icon: image,
+									title: place.name,
+                  position: place.geometry.location,
+									label: `${i + 1}`,
+									clickable: true
+								});
+								
+								marker.info = new google.maps.InfoWindow({
+                  content: infoWindowContent
+                });
+                
+                // console.log(marker.info)
+                
+                google.maps.event.addListener(marker, 'click', function() {
+									console.log(this)
+                  var thisMap = this.getMap()
+									this.info.open(this.getMap(), this);
+                });
+
+                var div = document.createElement('div');
+                var h3 = document.createElement('h3')
+                h3.textContent = `${i + 1} - ${place.name}`;
+                div.append(h3);
+								placesList.appendChild(div);
+
+								bounds.extend(place.geometry.location);
+							}
+							zoomedMap.fitBounds(bounds);
+						}
+
+            service = new google.maps.places.PlacesService(map);
+            service.textSearch(request, callback);
+
+            function callback(results, status) {
+              var myLatLng = {};
+              if (status == google.maps.places.PlacesServiceStatus.OK) {
+                createMarkers(results);
+              }
+            }
+            
+						
             infoWindow.setPosition(pos);
 						infoWindow.setContent('Jess is here.');
 						zoomedMap = new google.maps.Map(document.getElementById('map'), {
 							center: {lat: 41.8781, lng: -87.6298},
-							zoom: 17
+							zoom: 20,
+							styles: [
+            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+            {
+              featureType: 'administrative.locality',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'geometry',
+              stylers: [{color: '#263c3f'}]
+            },
+            {
+              featureType: 'poi.park',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#6b9a76'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry',
+              stylers: [{color: '#38414e'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#212a37'}]
+            },
+            {
+              featureType: 'road',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#9ca5b3'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry',
+              stylers: [{color: '#746855'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'geometry.stroke',
+              stylers: [{color: '#1f2835'}]
+            },
+            {
+              featureType: 'road.highway',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#f3d19c'}]
+            },
+            {
+              featureType: 'transit',
+              elementType: 'geometry',
+              stylers: [{color: '#2f3948'}]
+            },
+            {
+              featureType: 'transit.station',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#d59563'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'geometry',
+              stylers: [{color: '#17263c'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.fill',
+              stylers: [{color: '#515c6d'}]
+            },
+            {
+              featureType: 'water',
+              elementType: 'labels.text.stroke',
+              stylers: [{color: '#17263c'}]
+            }
+          ]
 						});
 						infoWindow.open(zoomedMap);
-						marker.setMap(map)
+						// marker.setMap(map)
 						map.setCenter(pos);
 
           }, function() {
@@ -95,7 +301,7 @@
       }
     </script>
     <script async defer
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3kAVv71tq2luKRlNpWEclUl_6qrbwo2Q&callback=initMap">
+    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3kAVv71tq2luKRlNpWEclUl_6qrbwo2Q&callback=initMap&libraries=places">
     </script>
   </body>
-</html> -->
+</html>
