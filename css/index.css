@@ -2,3 +2,45 @@ body {
 	display: grid;
 	grid-template-columns: 2fr 8fr
 }
+
+.ice-cream-list-pic{
+	object-fit: cover;
+	width: 90%;
+	height: 250px;;
+	margin-left: 20px;
+	margin-right: 10px;
+  }
+  .ice-cream-list {
+   border-style: solid;
+   overflow-x: auto;
+  }
+
+  .ice-cream-list h2{
+   font-family: 'Bungee Inline', cursive;
+   color: white;
+  }
+ #panel { 
+   background-color:#5cdb95;
+   position:absolute;
+   top:0;
+   left:0;
+   bottom:0;
+   /* width:300px; */
+   width: 33%;
+   overflow-y: auto;
+   border-style: solid;
+ }
+ #map {
+   position:absolute;
+   top:0;
+   /* left:300px; */
+   left:33%;
+   right:0;
+   bottom:0;
+ }
+ /* Optional: Makes the sample page fill the window. */
+ html, body {
+   height: 100%;
+   margin: 0;
+   padding: 0;
+ }
