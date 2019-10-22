@@ -1,5 +1,4 @@
 function createMarkers(places) {
-    console.log(places[0]);
     var bounds = new google.maps.LatLngBounds();
     let place;
     var infoWindowContent;
@@ -15,8 +14,7 @@ function createMarkers(places) {
       service = new google.maps.places.PlacesService(map);
       service.getDetails(request, function (place, status){
         if (status == google.maps.places.PlacesServiceStatus.OK){
-          console.log(curPos)
-          console.log(place.geometry.location)
+          console.log(place)
           var panel = document.getElementById('panel');
 
           var div = document.createElement('div');
@@ -55,7 +53,7 @@ function createMarkers(places) {
             aWebsite.href = place.website;
           }
           else{
-            aWebsite.href = ".";
+            aWebsite.href = "#";
           }
           aWebsite.target = "_blank"
           aWebsite.appendChild(websiteIcon);
@@ -101,10 +99,7 @@ function createMarkers(places) {
         content: infoWindowContent
       });
       
-      console.log(marker)
-      
       google.maps.event.addListener(marker, 'click', function() {
-        console.log(marker);
         var thisMap = this.getMap()
         this.info.open(this.getMap(), this);
       });

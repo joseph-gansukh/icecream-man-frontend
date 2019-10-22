@@ -252,6 +252,4 @@ function initMap() {
           handleLocationError(false, infoWindow, map.getCenter());
         }
       }
-
-      console.log(initMap);
 						
