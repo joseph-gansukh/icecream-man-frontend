@@ -1,7 +1,23 @@
+glyphState = {
+  'none' : '',
+  '' : 'none'
+}
+
+
 function createMarkers(places) {
     var bounds = new google.maps.LatLngBounds();
     let place;
     var infoWindowContent;
+
+    const body = document.querySelector('body')
+    const detailDiv = document.getElementById('details')
+    // detailDiv.className = "details"
+    // detailDiv.style.height = '200px';
+    // detailDiv.style.width = '200px';
+    // detailDiv.style.backgroundColor= 'red';
+    detailDiv.style.display = 'none';
+
+    body.appendChild(detailDiv)
 
     for (var i = 0; i < 10; i++) {
       place = places[i]
@@ -64,6 +80,30 @@ function createMarkers(places) {
           h2.textContent = `${place.name}`;
           div.append(h2, imgDiv, iconsDiv, p);
           panel.appendChild(div);
+
+          div.addEventListener('click', (e) => {
+            console.log('clicked', e.target)
+
+            panel.style.display = 'none'
+            const i = document.createElement('i')
+            i.className = "fas fa-arrow-circle-left"
+            detailDiv.style.display = glyphState[detailDiv.style.display]
+            const div1 = document.createElement('div')
+            div1.className = "ice-cream-list";
+            const p1 = document.createElement('p')
+            p1.textContent = place.formatted_address
+            const h2 = document.createElement('h2')
+            h2.textContent = `${place.name}`;
+            div1.append(i, h2, imgDiv, iconsDiv, p);
+            detailDiv.appendChild(div1);
+
+            i.addEventListener('click', (e) => {
+              detailDiv.style.display = glyphState[detailDiv.style.display]
+              panel.style.display = ''
+            })
+
+            })
+
         }
         else{
           console.log(status);
@@ -107,19 +147,23 @@ function createMarkers(places) {
       bounds.extend(place.geometry.location);
     }
     map.fitBounds(bounds);
-  }
+}
 
-  function callback(results, status) {
-    var myLatLng = {};
-    if (status == google.maps.places.PlacesServiceStatus.OK) {
-      createMarkers(results);
-    }
+function callback(results, status) {
+  var myLatLng = {};
+  if (status == google.maps.places.PlacesServiceStatus.OK) {
+    createMarkers(results);
   }
+}
 
-  function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-    infoWindow.setPosition(pos);
-    infoWindow.setContent(browserHasGeolocation ?
-      'Error: The Geolocation service failed.' :
-      'Error: Your browser doesn\'t support geolocation.');
-    infoWindow.open(map);
-  }
+function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+  infoWindow.setPosition(pos);
+  infoWindow.setContent(browserHasGeolocation ?
+    'Error: The Geolocation service failed.' :
+    'Error: Your browser doesn\'t support geolocation.');
+  infoWindow.open(map);
+}
+
+
+
+
