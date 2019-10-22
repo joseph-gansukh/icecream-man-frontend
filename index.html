@@ -4,12 +4,41 @@
     <title>Geolocation</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
+    <link href="https://fonts.googleapis.com/css?family=Bevan&display=swap" rel="stylesheet">
     <style>
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
+       .ice-cream-list-pic{
+         object-fit: cover;
+         width: 100%;
+         height: 250px;;
+       }
+       .ice-cream-list {
+        border-style: solid;
+        overflow-x: auto;
+       }
+
+       .ice-cream-list h2{
+        font-family: 'Bevan';
+       }
+      #panel { 
+        background-color: white;
+        position:absolute;
+        top:0;
+        left:0;
+        bottom:0;
+        /* width:300px; */
+        width: 33%;
+        overflow-y: auto;
+        border-style: solid;
+      }
       #map {
-				height: 100%;
-				width: 100%;
+        position:absolute;
+        top:0;
+        /* left:300px; */
+        left:33%;
+        right:0;
+        bottom:0;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -20,7 +49,9 @@
     </style>
   </head>
   <body>
-    <div id="places"></div>
+    <div id="panel">
+      
+    </div>
     <div id="map"></div>
     <script>
       // Note: This example requires that you consent to location sharing when
@@ -31,85 +62,218 @@
       function initMap() {
         map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 41.8781, lng: -87.6298},
-          zoom: 21,
+          zoom: 10,
 					styles: [
-            {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
-            {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
-            {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
             {
-              featureType: 'administrative.locality',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#242f3e"
+                }
+              ]
             },
             {
-              featureType: 'poi',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#746855"
+                }
+              ]
             },
             {
-              featureType: 'poi.park',
-              elementType: 'geometry',
-              stylers: [{color: '#263c3f'}]
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#242f3e"
+                }
+              ]
             },
             {
-              featureType: 'poi.park',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#6b9a76'}]
+              "featureType": "administrative.land_parcel",
+              "elementType": "labels",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
             },
             {
-              featureType: 'road',
-              elementType: 'geometry',
-              stylers: [{color: '#38414e'}]
+              "featureType": "administrative.locality",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#d59563"
+                }
+              ]
             },
             {
-              featureType: 'road',
-              elementType: 'geometry.stroke',
-              stylers: [{color: '#212a37'}]
+              "featureType": "poi",
+              "elementType": "labels.text",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
             },
             {
-              featureType: 'road',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#9ca5b3'}]
+              "featureType": "poi",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#d59563"
+                }
+              ]
             },
             {
-              featureType: 'road.highway',
-              elementType: 'geometry',
-              stylers: [{color: '#746855'}]
+              "featureType": "poi.business",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
             },
             {
-              featureType: 'road.highway',
-              elementType: 'geometry.stroke',
-              stylers: [{color: '#1f2835'}]
+              "featureType": "poi.park",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#263c3f"
+                }
+              ]
             },
             {
-              featureType: 'road.highway',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#f3d19c'}]
+              "featureType": "poi.park",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#6b9a76"
+                }
+              ]
             },
             {
-              featureType: 'transit',
-              elementType: 'geometry',
-              stylers: [{color: '#2f3948'}]
+              "featureType": "road",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#38414e"
+                }
+              ]
             },
             {
-              featureType: 'transit.station',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#d59563'}]
+              "featureType": "road",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                {
+                  "color": "#212a37"
+                }
+              ]
             },
             {
-              featureType: 'water',
-              elementType: 'geometry',
-              stylers: [{color: '#17263c'}]
+              "featureType": "road",
+              "elementType": "labels.icon",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
             },
             {
-              featureType: 'water',
-              elementType: 'labels.text.fill',
-              stylers: [{color: '#515c6d'}]
+              "featureType": "road",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#9ca5b3"
+                }
+              ]
             },
             {
-              featureType: 'water',
-              elementType: 'labels.text.stroke',
-              stylers: [{color: '#17263c'}]
+              "featureType": "road.highway",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#746855"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "geometry.stroke",
+              "stylers": [
+                {
+                  "color": "#1f2835"
+                }
+              ]
+            },
+            {
+              "featureType": "road.highway",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#f3d19c"
+                }
+              ]
+            },
+            {
+              "featureType": "road.local",
+              "elementType": "labels",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "transit",
+              "stylers": [
+                {
+                  "visibility": "off"
+                }
+              ]
+            },
+            {
+              "featureType": "transit",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#2f3948"
+                }
+              ]
+            },
+            {
+              "featureType": "transit.station",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#d59563"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "geometry",
+              "stylers": [
+                {
+                  "color": "#17263c"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text.fill",
+              "stylers": [
+                {
+                  "color": "#515c6d"
+                }
+              ]
+            },
+            {
+              "featureType": "water",
+              "elementType": "labels.text.stroke",
+              "stylers": [
+                {
+                  "color": "#17263c"
+                }
+              ]
             }
           ]
         });
@@ -128,7 +292,7 @@
 
             var request = {
               location: curPos,
-              radius: '100',
+              radius: '200',
               query: "ice cream"
 						};
 						
@@ -136,8 +300,57 @@
               console.log(places[0]);
 							var bounds = new google.maps.LatLngBounds();
 							var placesList = document.getElementById('places');
+              let place;
+              var infoWindowContent;
 
-							for (var i = 0, place; place = places[i]; i++) {
+							for (var i = 0; i < 10; i++) {
+                place = places[i]
+
+                var request = {
+                  placeId: place.place_id,
+                  fields: ['website', 'formatted_phone_number', 'rating', 'name', 'url', 'photos', 'formatted_address', 'geometry']
+                }
+
+                service = new google.maps.places.PlacesService(map);
+                service.getDetails(request, function (place, status){
+                  if (status == google.maps.places.PlacesServiceStatus.OK){
+                    console.log(curPos)
+                    console.log(place.geometry.location)
+                    var panel = document.getElementById('panel');
+
+                    var div = document.createElement('div');
+                    var imgDiv = document.createElement('div');
+                    var h2 = document.createElement('h2')
+                    var p = document.createElement('p');
+                    var aWebsite = document.createElement('a');
+                    var aUrl = document.createElement('a');
+                    var img = document.createElement('img');
+                    var br = document.createElement('br');
+
+                    img.className = "ice-cream-list-pic"
+                    img.src = place.photos[2].getUrl();
+                    img.width = "200";
+                    img.height = "200";
+                    imgDiv.append(img);
+
+                    aUrl.href = place.url;
+                    aUrl.target = "_blank";
+                    aUrl.textContent = "Directions"
+
+                    aWebsite.href = place.website;
+                    aWebsite.target = "_blank"
+                    aWebsite.textContent = "Website"
+                    div.className = "ice-cream-list";
+                    p.textContent = place.formatted_address
+                    h2.textContent = `${place.name}`;
+                    div.append(h2, imgDiv, aUrl, br, aWebsite, p);
+                    panel.appendChild(div);
+                  }
+                  else{
+                    console.log(status);
+                  }
+                })
+
 								var image = {
 									url: "https://www.cfacdn.com/img/order/COM/Menu_Refresh/Drinks/Drinks%20PDP/_0000s_0027_%5BFeed%5D_0006s_0013_Drinks_Ice-Dream.png",
 									size: new google.maps.Size(100, 100),
@@ -146,8 +359,8 @@
 									scaledSize: new google.maps.Size(50, 50)
 								};
 
-                var infoWindowContent = '<div class="info_content">' +
-									`<a href=""<h3>${place.name}</h3>>` + `<p>${place.formatted_address}</p>` + 
+                infoWindowContent = '<div class="info_content">' +
+									`<h3>${place.name}</h3>` + `<p>${place.formatted_address}</p>` + 
 									'</div>';
 
 								var marker = new google.maps.Marker({
@@ -155,7 +368,10 @@
 									icon: image,
 									title: place.name,
                   position: place.geometry.location,
-									label: `${i + 1}`,
+									label: {
+                    text: `${i + 1}`,
+                    color: 'white'
+                    },
 									clickable: true
 								});
                 
@@ -166,17 +382,12 @@
                 console.log(marker)
                 
                 google.maps.event.addListener(marker, 'click', function() {
-                  console.log(google.maps);
+                  console.log(marker);
                   var thisMap = this.getMap()
 									this.info.open(this.getMap(), this);
                 });
 
-                // var div = document.createElement('div');
-                // var h3 = document.createElement('h3')
-                // h3.textContent = `${i + 1} - ${place.name}`;
-                // div.append(h3);
-								// placesList.appendChild(div);
-                  bounds.extend(place.geometry.location);
+                bounds.extend(place.geometry.location);
               }
               map.fitBounds(bounds);
             }
