@@ -1,11 +1,10 @@
 function createMarkers(places) {
     console.log(places[0]);
-                  var bounds = new google.maps.LatLngBounds();
-                  var placesList = document.getElementById('places');
+    var bounds = new google.maps.LatLngBounds();
     let place;
     var infoWindowContent;
 
-                  for (var i = 0; i < 10; i++) {
+    for (var i = 0; i < 10; i++) {
       place = places[i]
 
       var request = {
@@ -21,31 +20,51 @@ function createMarkers(places) {
           var panel = document.getElementById('panel');
 
           var div = document.createElement('div');
+          var iconsDiv = document.createElement('div');
+
           var imgDiv = document.createElement('div');
           var h2 = document.createElement('h2')
           var p = document.createElement('p');
+          var websiteIcon = document.createElement('img');
           var aWebsite = document.createElement('a');
+          var urlIcon = document.createElement('img');
           var aUrl = document.createElement('a');
-          var img = document.createElement('img');
+          var photoImg = document.createElement('img');;
           var br = document.createElement('br');
 
-          img.className = "ice-cream-list-pic"
-          img.src = place.photos[2].getUrl();
-          img.width = "200";
-          img.height = "200";
-          imgDiv.append(img);
+          photoImg.className = "ice-cream-list-pic"
+          photoImg.src = place.photos[2].getUrl();
+          photoImg.width = "200";
+          photoImg.height = "200";
+          imgDiv.append(photoImg);
+
+          urlIcon.className = "list-icon"
+          urlIcon.src = "https://icon-library.net/images/google-maps-directions-icon/google-maps-directions-icon-8.jpg";
 
           aUrl.href = place.url;
           aUrl.target = "_blank";
-          aUrl.textContent = "Directions"
+          aUrl.appendChild(urlIcon);
+          iconsDiv.append(aUrl);
 
-          aWebsite.href = place.website;
+          iconsDiv.className = "icon-div"
+
+          websiteIcon.className = "list-icon";
+          websiteIcon.src = "https://www.freeiconspng.com/uploads/website-icon-18.png";
+
+          if (place.website !== undefined){
+            aWebsite.href = place.website;
+          }
+          else{
+            aWebsite.href = ".";
+          }
           aWebsite.target = "_blank"
-          aWebsite.textContent = "Website"
+          aWebsite.appendChild(websiteIcon);
+          iconsDiv.append(aWebsite);
+
           div.className = "ice-cream-list";
           p.textContent = place.formatted_address
           h2.textContent = `${place.name}`;
-          div.append(h2, imgDiv, aUrl, br, aWebsite, p);
+          div.append(h2, imgDiv, iconsDiv, p);
           panel.appendChild(div);
         }
         else{
@@ -53,31 +72,32 @@ function createMarkers(places) {
         }
       })
 
-                      var image = {
-                          url: "https://www.cfacdn.com/img/order/COM/Menu_Refresh/Drinks/Drinks%20PDP/_0000s_0027_%5BFeed%5D_0006s_0013_Drinks_Ice-Dream.png",
-                          size: new google.maps.Size(100, 100),
-                          origin: new google.maps.Point(0, 0),
-                          anchor: new google.maps.Point(17, 34),
-                          scaledSize: new google.maps.Size(50, 50)
-                      };
+      var image = {
+        url: "https://www.cfacdn.com/img/order/COM/Menu_Refresh/Drinks/Drinks%20PDP/_0000s_0027_%5BFeed%5D_0006s_0013_Drinks_Ice-Dream.png",
+        size: new google.maps.Size(100, 100),
+        origin: new google.maps.Point(0, 0),
+        anchor: new google.maps.Point(17, 34),
+        scaledSize: new google.maps.Size(50, 50)
+      };
 
       infoWindowContent = '<div class="info_content">' +
-                          `<h3>${place.name}</h3>` + `<p>${place.formatted_address}</p>` + 
-                          '</div>';
+      `<h3>${place.name}</h3>` + 
+      `<p>${place.formatted_address}</p>` + 
+      '</div>';
 
-                      var marker = new google.maps.Marker({
-                          map: map,
-                          icon: image,
-                          title: place.name,
+      var marker = new google.maps.Marker({
+        map: map,
+        icon: image,
+        title: place.name,
         position: place.geometry.location,
-                          label: {
+        label: {
           text: `${i + 1}`,
           color: 'white'
-          },
-                          clickable: true
-                      });
+        },
+        clickable: true
+      });
       
-                      marker.info = new google.maps.InfoWindow({
+      marker.info = new google.maps.InfoWindow({
         content: infoWindowContent
       });
       
@@ -86,7 +106,7 @@ function createMarkers(places) {
       google.maps.event.addListener(marker, 'click', function() {
         console.log(marker);
         var thisMap = this.getMap()
-                          this.info.open(this.getMap(), this);
+        this.info.open(this.getMap(), this);
       });
 
       bounds.extend(place.geometry.location);
@@ -104,7 +124,7 @@ function createMarkers(places) {
   function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.setPosition(pos);
     infoWindow.setContent(browserHasGeolocation ?
-                          'Error: The Geolocation service failed.' :
-                          'Error: Your browser doesn\'t support geolocation.');
+      'Error: The Geolocation service failed.' :
+      'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
   }
