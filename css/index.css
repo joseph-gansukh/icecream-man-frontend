@@ -1,3 +1,34 @@
+/* Add a black background color to the top navigation */
+.something-random{
+	height: 48px;
+}
+.topnav {
+  background-image: url(https://media3.giphy.com/media/xT4uQmy4Ta0eg1T7W0/giphy.gif);
+	z-index: 10000;
+	position: absolute;
+	top: 0px;
+  width: 100%;
+  height: 48px;
+	background-color: #d4418e;
+}
+.topnav h1{
+  margin: 0px;
+  top: 8px;
+  z-index: 10000;
+  position: relative;
+  margin-bottom: 40px;
+  margin-left: 18px;
+  font-family: 'Luckiest Guy', cursive;
+}
+
+.topnav h1 i{
+  position: relative;
+	z-index: 10000;
+  margin-bottom: 30px;
+  margin-left: 18px;
+  color: purple;
+}
+  
 body {
 	display: grid;
 	grid-template-columns: 2fr 8fr
@@ -44,6 +75,7 @@ body {
 	background-color: #d4418e;
 	background-image: linear-gradient(315deg, #d4418e 0%, #0652c5 74%);
    position:absolute;
+   margin-top: 48px;
    top:0;
    left:0;
    bottom:0;
@@ -54,7 +86,8 @@ body {
  }
  #details {
 	background-color: #d4418e;
-	background-image: linear-gradient(315deg, #d4418e 0%, #0652c5 74%);
+  background-image: linear-gradient(315deg, #d4418e 0%, #0652c5 74%);
+  margin-top: 48px;
    position:absolute;
    top:0;
    left:0;
@@ -66,6 +99,7 @@ body {
  }
  #map {
    position:absolute;
+   margin-top: 48px;
    top:0;
    /* left:300px; */
    left:33%;
@@ -79,9 +113,12 @@ body {
    padding: 0;
  }
 
+ .topnav button  {
+  margin: 0;
+  display: inline;
+}
+.topnav input{
+  margin: 0;
+  display: inline;
 
-/* .details {
-  position: relative;
-  left: 480px;
-  top: 100px;
-} */
+}
