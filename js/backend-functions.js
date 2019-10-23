@@ -1,5 +1,5 @@
 let username = "";
-
+let userId = 0;
 const onLoad = () => {
     document.addEventListener("DOMContentLoaded", (event) => {
         console.log("mehh")
@@ -60,6 +60,7 @@ const logInOrOut = (event) => {
     else {
         event.target.innerHTML = "Log In"
         username = "";
+        userId = 0;
         console.log(p)
         p.innerText = "";
         p.parentNode.hidden = true;
@@ -68,10 +69,12 @@ const logInOrOut = (event) => {
 
 
 const loggedIn = (userObj) => {
+    console.log(userObj)
     const p = document.getElementById("show-user").children[0];
     const button = document.getElementById("username-button");
     button.innerHTML = "LogOut";
     username = userObj.name;
+    userId = userObj.id
     p.textContent = username;
     p.parentNode.hidden = false;
     console.log(username);

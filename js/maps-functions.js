@@ -2,7 +2,9 @@ glyphState = {
   'none' : '',
   '' : 'none'
 }
+let restObj = {};
 
+let divCount = 0;
 
 function createMarkers(places) {
     var bounds = new google.maps.LatLngBounds();
@@ -79,7 +81,10 @@ function createMarkers(places) {
           panel.appendChild(div);
 
           div.addEventListener('click', (e) => {
-            console.log('clicked', e.target)
+            // console.log('place', place)
+            divCount++;
+            createResturant(event, place);
+            // console.log('hit createRestaurant')
 
             panel.style.display = 'none'
             const i = document.createElement('i')
@@ -88,23 +93,53 @@ function createMarkers(places) {
             // i.style.height = '50px'
             detailDiv.style.display = glyphState[detailDiv.style.display]
             detailDiv.innerHTML = ''
+
             const div1 = document.createElement('div')
             div1.className = "ice-cream-list";
+
             const p1 = document.createElement('p')
             p1.textContent = place.formatted_address
+
             const h2show = document.createElement('h2')
             h2show.textContent = `${place.name}`;
+
             var imgDivshow = document.createElement('div');
             var photoImgshow = document.createElement('img');;
+
             photoImgshow.className = "ice-cream-list-pic"
             photoImgshow.src = place.photos[2].getUrl();
             photoImgshow.width = "200";
             photoImgshow.height = "200";
+
             imgDivshow.append(photoImgshow);
+            
             var iconsDivshow = document.createElement('div');
 
             const commentsDiv = document.createElement('div')
-            commentsDiv.innerHTML = 'test comment'
+            // commentsDiv.style.backgroundColor = "white"
+            commentsDiv.style.height = '200px'
+            commentsDiv.style.overflowY = 'auto';
+            const h2 = document.createElement('h2')
+            h2.style.color = "black"
+            h2.innerText = "Comments:"
+            const contentDiv = document.createElement('div')
+            console.log(restObj)
+            contentDiv.id = `${divCount}-content-div`
+            // content.style.color = 'black'
+            // content.textContent = "No Comment"
+            
+            const commentText = document.createElement('textarea')
+            
+            const commentBtn = document.createElement('button');
+
+            commentBtn.addEventListener('click', (event) => {
+              createComment(event);
+            })
+            commentBtn.innerHTML = "Comment";
+
+            // console.log(restObj)
+
+            commentsDiv.append(h2, contentDiv, commentText, commentBtn)
 
             div1.append(i, h2show, imgDivshow, iconsDivshow, p1, commentsDiv);
 
@@ -112,7 +147,6 @@ function createMarkers(places) {
             detailDiv.appendChild(div1);
 
             i.addEventListener('click', (e) => {
-              console.log(i, e)
               detailDiv.style.display = glyphState[detailDiv.style.display]
               panel.style.display = ''
             })
@@ -121,7 +155,7 @@ function createMarkers(places) {
 
         }
         else{
-          console.log(status);
+          // console.log(status);
         }
       })
 
@@ -193,4 +227,111 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       title: 'If you need that ice-cream, we need your location',
       text: 'Please refresh and allow location services',
   })
+  }
+
+  const createResturant = (event, place) =>{
+    const reqObj = {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        place_id: place.place_id
+      })
+    }
+
+    fetch('http://localhost:3000/restaurants', reqObj)
+    .then(resp => resp.json())
+    .then(json => storeResturant(event, json));
+  }
+
+  const storeResturant = (event, restaurant) => {
+    // console.log(restaurant)
+    const contentDiv = document.getElementById(`${divCount}-content-div`);
+    restObj = restaurant;
+    // console.log(restaurant.comments)
+    
+
+    if (restaurant.comments.length > 0){
+      console.log()
+      restObj.comments.forEach(comment => {
+        console.log("this is a comment", comment)
+        console.log(contentDiv)
+        contentDiv.append(makeComment(comment))
+      });
+    }
+  }
+
+  const createComment = event =>{
+    const commentText = event.target.parentNode.children[2].value
+    const commentLog = event.target.parentNode.children[1]
+    console.log(username)
+
+    if (username !== ""){
+      console.log(username)
+      const reqObj = {
+        method: "POST",
+        headers:{
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify ({
+          content: commentText,
+          user_id: userId,
+          restaurant_id: restObj.id,
+          username: username
+        })
+      }
+      fetch("http://localhost:3000/comments", reqObj)
+      .then(resp => resp.json())
+      .then(json => commentLog.append(makeComment(json)))
+    }
+    else {
+      Swal.fire({
+        title: 'Enter Your Username',
+        input: 'text',
+        inputAttributes: {
+        autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Log In',
+        showLoaderOnConfirm: true,
+        preConfirm: (username) => {
+            return fetch("http://localhost:3000/users", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if (json.name === ""){
+                    Swal.showValidationMessage(
+                        "Please enter a username"
+                    )
+                }
+                else{
+                    loggedIn(json)
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                Swal.showValidationMessage(
+                "There was an error retrieving your username"
+                )
+            })
+        }
+    })
+    }
+  }
+
+  const makeComment = commentObj =>{
+    console.log('hi', commentObj)
+    const p = document.createElement('p');
+    p.textContent = `${commentObj.username}: ${commentObj.content}`
+    return p
   }
