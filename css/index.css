@@ -11,16 +11,26 @@
   height: 48px;
 	background-color: #d4418e;
 }
+.topnav img{
+  height: auto;
+  width: 25px;
+}
 .topnav h1{
   margin: 0px;
   top: 8px;
-  z-index: 10000;
   position: relative;
   margin-bottom: 40px;
   margin-left: 18px;
   font-family: 'Luckiest Guy', cursive;
 }
-
+.topnav p{
+  margin: 0;
+    position: absolute;
+    top: 0;
+    margin-left: 1276px;
+    margin-top: 5px;
+    font-size: 29px;
+}
 .topnav h1 i{
   position: relative;
 	z-index: 10000;
@@ -117,6 +127,11 @@ body {
  .topnav button  {
   margin: 0;
   display: inline;
+  position: absolute;
+  top: 0;
+  margin-left: 1363px;
+  margin-top: 11px;
+  font-size: 17px;
 }
 .topnav input{
   margin: 0;

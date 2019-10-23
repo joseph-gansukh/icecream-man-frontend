@@ -190,7 +190,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     infoWindow.open(map);
     Swal.fire({
       type: 'error',
-      title: 'If you need that cream, we need your location',
+      title: 'If you need that ice-cream, we need your location',
       text: 'Please refresh and allow location services',
   })
   }
