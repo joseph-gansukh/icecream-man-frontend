@@ -14,7 +14,6 @@ function createMarkers(places) {
       service = new google.maps.places.PlacesService(map);
       service.getDetails(request, function (place, status){
         if (status == google.maps.places.PlacesServiceStatus.OK){
-          console.log(place)
           var panel = document.getElementById('panel');
 
           var div = document.createElement('div');
@@ -122,4 +121,9 @@ function createMarkers(places) {
       'Error: The Geolocation service failed.' :
       'Error: Your browser doesn\'t support geolocation.');
     infoWindow.open(map);
+    Swal.fire({
+      type: 'error',
+      title: 'If you need that cream, we need your location',
+      text: 'Please refresh and allow location services',
+  })
   }

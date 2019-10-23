@@ -5,16 +5,29 @@
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no">
     <meta charset="utf-8">
 
+    <link href="https://fonts.googleapis.com/css?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css">
     <link href="https://fonts.googleapis.com/css?family=Bungee+Inline&display=swap" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="./css/index.css">
   </head>
   <body>
 
-    <div id="panel"></div>
-    <div id="map"></div>
+    <div class="topnav">
+      <h1><i class="fas fa-ice-cream"></i> We Creamin'</h1>
+      <button class="log-in-out" id="username-button">LogIn</button>
+      <!-- <button type="submit" id="username-button">Submit</button>
+      <input type="text" placeholder="Username.." id="username"> -->
+    </div>
+    <div class="something-random"></div>
+    <div>
+      <div id="panel"></div>
+      <div id="map"></div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <script src="./js/index.js" type="text/javascript"></script>
-    <script src="./js/functions.js" type="text/javascript"></script>
+    <script src="./js/maps-functions.js" type="text/javascript"></script>
+    <script src="./js/backend-functions.js" type="text/javascript"></script>
     <script async defer
     src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD3kAVv71tq2luKRlNpWEclUl_6qrbwo2Q&callback=initMap&libraries=places">
     </script>
