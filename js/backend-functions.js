@@ -37,7 +37,7 @@ const logIn = (event) => {
                 }
                 return response.json()
             })
-            .then(json => console.log(json))
+            .then(json => loggedIn(json))
             .catch(error => {
                 Swal.showValidationMessage(
                   "There was an error retrieving your username"

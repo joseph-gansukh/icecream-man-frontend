@@ -33,6 +33,7 @@ body {
 	display: grid;
 	grid-template-columns: 2fr 8fr
 }
+
 .info-content{
 	background-color: yellow;
 }
@@ -75,6 +76,19 @@ body {
 	background-image: linear-gradient(315deg, #d4418e 0%, #0652c5 74%);
    position:absolute;
    margin-top: 48px;
+   top:0;
+   left:0;
+   bottom:0;
+   /* width:300px; */
+   width: 33%;
+   overflow-y: auto;
+   border-style: solid;
+ }
+ #details {
+	background-color: #d4418e;
+  background-image: linear-gradient(315deg, #d4418e 0%, #0652c5 74%);
+  margin-top: 48px;
+   position:absolute;
    top:0;
    left:0;
    bottom:0;
