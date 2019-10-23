@@ -95,6 +95,7 @@ body {
    /* width:300px; */
    width: 33%;
    overflow-y: auto;
+   overflow-wrap: break-word;
    border-style: solid;
  }
  #map {
