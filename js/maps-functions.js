@@ -11,10 +11,6 @@ function createMarkers(places) {
 
     const body = document.querySelector('body')
     const detailDiv = document.getElementById('details')
-    // detailDiv.className = "details"
-    // detailDiv.style.height = '200px';
-    // detailDiv.style.width = '200px';
-    // detailDiv.style.backgroundColor= 'red';
     detailDiv.style.display = 'none';
 
     body.appendChild(detailDiv)
@@ -24,15 +20,17 @@ function createMarkers(places) {
 
       var request = {
         placeId: place.place_id,
-        fields: ['website', 'formatted_phone_number', 'rating', 'name', 'url', 'photos', 'formatted_address', 'geometry']
+        fields: ['website', 'formatted_phone_number', 'rating', 'name', 'url', 'photos', 'formatted_address', 'geometry', 'place_id']
       }
 
       service = new google.maps.places.PlacesService(map);
       service.getDetails(request, function (place, status){
         if (status == google.maps.places.PlacesServiceStatus.OK){
+          // console.log('placeId', place.place_id)
           var panel = document.getElementById('panel');
 
           var div = document.createElement('div');
+          div.dataset.placeId = place.place_id
           var iconsDiv = document.createElement('div');
 
           var imgDiv = document.createElement('div');
@@ -85,18 +83,36 @@ function createMarkers(places) {
 
             panel.style.display = 'none'
             const i = document.createElement('i')
-            i.className = "fas fa-arrow-circle-left"
+            i.className = "fas fa-arrow-circle-left fa-3x"
+            // i.style.width = '50px'
+            // i.style.height = '50px'
             detailDiv.style.display = glyphState[detailDiv.style.display]
+            detailDiv.innerHTML = ''
             const div1 = document.createElement('div')
             div1.className = "ice-cream-list";
             const p1 = document.createElement('p')
             p1.textContent = place.formatted_address
-            const h2 = document.createElement('h2')
-            h2.textContent = `${place.name}`;
-            div1.append(i, h2, imgDiv, iconsDiv, p);
+            const h2show = document.createElement('h2')
+            h2show.textContent = `${place.name}`;
+            var imgDivshow = document.createElement('div');
+            var photoImgshow = document.createElement('img');;
+            photoImgshow.className = "ice-cream-list-pic"
+            photoImgshow.src = place.photos[2].getUrl();
+            photoImgshow.width = "200";
+            photoImgshow.height = "200";
+            imgDivshow.append(photoImgshow);
+            var iconsDivshow = document.createElement('div');
+
+            const commentsDiv = document.createElement('div')
+            commentsDiv.innerHTML = 'test comment'
+
+            div1.append(i, h2show, imgDivshow, iconsDivshow, p1, commentsDiv);
+
+
             detailDiv.appendChild(div1);
 
             i.addEventListener('click', (e) => {
+              console.log(i, e)
               detailDiv.style.display = glyphState[detailDiv.style.display]
               panel.style.display = ''
             })
