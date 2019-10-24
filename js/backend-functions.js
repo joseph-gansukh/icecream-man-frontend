@@ -1,5 +1,10 @@
 let username = "";
-let userId = 0;
+let globalUserObj = {};
+
+let userLikes = [];
+
+let likesRestIds = [];
+
 const onLoad = () => {
     document.addEventListener("DOMContentLoaded", (event) => {
         console.log("mehh")
@@ -58,6 +63,12 @@ const logInOrOut = (event) => {
         })
     }
     else {
+        Swal.fire({
+            type: 'success',
+            title: 'You have successfully logged out!',
+            showConfirmButton: false,
+            timer: 1500
+        })
         event.target.innerHTML = "Log In"
         username = "";
         userId = 0;
@@ -74,7 +85,9 @@ const loggedIn = (userObj) => {
     const button = document.getElementById("username-button");
     button.innerHTML = "LogOut";
     username = userObj.name;
-    userId = userObj.id
+    globalUserObj = userObj
+    userLikes = userObj.likes
+    likesRestIds = userLikes.map(like => like.restaurant_id);
     p.textContent = username;
     p.parentNode.hidden = false;
     console.log(username);

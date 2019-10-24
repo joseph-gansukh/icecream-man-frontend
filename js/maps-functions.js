@@ -82,8 +82,9 @@ function createMarkers(places) {
 
           div.addEventListener('click', (e) => {
             // console.log('place', place)
+            console.log()
             divCount++;
-            createResturant(event, place);
+            createRestaurant(event, place);
             // console.log('hit createRestaurant')
 
             panel.style.display = 'none'
@@ -115,6 +116,26 @@ function createMarkers(places) {
             
             var iconsDivshow = document.createElement('div');
 
+            const likeDiv = document.createElement('div')
+            const likeBtn = document.createElement('button')
+            if (username === ""){
+              likeBtn.innerHTML = "like"
+            }
+            else if (likesRestIds.includes(restObj.id)){
+              likeBtn.innerHTML = 'unlike'
+            } else{
+              likeBtn.innerHTML = "like"
+            }
+            likeBtn.id = `${divCount}-like-button`
+            likeBtn.addEventListener("click", (event) => {
+              if (likesRestIds.includes(restObj.id)){
+                unLikeRestaurant(event, place)
+              } else{
+                likeRestaurant(event, place)
+              }
+            })
+
+            likeDiv.append(likeBtn)
             const commentsDiv = document.createElement('div')
             // commentsDiv.style.backgroundColor = "white"
             commentsDiv.style.height = '200px'
@@ -141,7 +162,7 @@ function createMarkers(places) {
 
             commentsDiv.append(h2, contentDiv, commentText, commentBtn)
 
-            div1.append(i, h2show, imgDivshow, iconsDivshow, p1, commentsDiv);
+            div1.append(i, h2show, imgDivshow, iconsDivshow, p1, likeDiv, commentsDiv);
 
 
             detailDiv.appendChild(div1);
@@ -229,7 +250,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
   })
   }
 
-  const createResturant = (event, place) =>{
+  const createRestaurant = (event, place) =>{
     const reqObj = {
       method: "POST",
       headers: {
@@ -242,10 +263,10 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
 
     fetch('http://localhost:3000/restaurants', reqObj)
     .then(resp => resp.json())
-    .then(json => storeResturant(event, json));
+    .then(json => storeRestaurant(event, json));
   }
 
-  const storeResturant = (event, restaurant) => {
+  const storeRestaurant = (event, restaurant) => {
     // console.log(restaurant)
     const contentDiv = document.getElementById(`${divCount}-content-div`);
     restObj = restaurant;
@@ -277,7 +298,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         },
         body: JSON.stringify ({
           content: commentText,
-          user_id: userId,
+          user_id: globalUserObj.id,
           restaurant_id: restObj.id,
           username: username
         })
@@ -342,4 +363,135 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     const p = document.createElement('p');
     p.textContent = `${commentObj.username}: ${commentObj.content}`
     return p
+  }
+
+  const likeRestaurant = (event, place) => {
+    console.log(place)
+    console.log(globalUserObj.id)
+    console.log(restObj.id)
+    if (username === ""){
+      Swal.fire({
+        title: 'Enter Your Username',
+        input: 'text',
+        inputAttributes: {
+        autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Log In',
+        showLoaderOnConfirm: true,
+        preConfirm: (username) => {
+            return fetch("http://localhost:3000/users", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if (json.name === ""){
+                    Swal.showValidationMessage(
+                        "Please enter a username"
+                    )
+                }
+                else{
+                    loggedIn(json)
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                Swal.showValidationMessage(
+                "There was an error retrieving your username"
+                )
+            })
+        }
+      })
+    }
+    else{
+      reqObj = {
+        method: "POST",
+        headers:{
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: globalUserObj.id,
+          restaurant_id: restObj.id
+        })
+      }
+
+      fetch("http://localhost:3000/likes", reqObj)
+      .then(resp => resp.json())  
+      .then(json => console.log(json))
+      event.target.innerHTML = "unlike"
+    }
+  }
+
+  const unLikeRestaurant = (event, place) => {
+    console.log(place)
+    console.log(globalUserObj.id)
+    console.log(restObj.id)
+    if (username === ""){
+      Swal.fire({
+        title: 'Enter Your Username',
+        input: 'text',
+        inputAttributes: {
+        autocapitalize: 'off'
+        },
+        showCancelButton: true,
+        confirmButtonText: 'Log In',
+        showLoaderOnConfirm: true,
+        preConfirm: (username) => {
+            return fetch("http://localhost:3000/users", {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json"
+                },
+                body: JSON.stringify({
+                    username: username
+                })
+            })
+            .then(response => {
+                return response.json()
+            })
+            .then(json => {
+                if (json.name === ""){
+                    Swal.showValidationMessage(
+                        "Please enter a username"
+                    )
+                }
+                else{
+                    loggedIn(json)
+                }
+            })
+            .catch(error => {
+                console.log(error)
+                Swal.showValidationMessage(
+                "There was an error retrieving your username"
+                )
+            })
+        }
+      })
+    }
+    else{
+      reqObj = {
+        method: "DELETE",
+        headers:{
+          "Content-type": "application/json"
+        },
+        body: JSON.stringify({
+          user_id: globalUserObj.id,
+          restaurant_id: restObj.id
+        })
+      }
+
+      fetch(`http://localhost:3000/likes/${restObj.id}`, reqObj)
+      .then(resp => resp.json())  
+      .then(json => console.log(json))
+      event.target.innerHTML = "like"
+      likesRestIds.push(restObj.id)
+    }
   }
