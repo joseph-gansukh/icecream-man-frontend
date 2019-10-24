@@ -1,3 +1,8 @@
+let glyphStates = {
+  "♡": "♥",
+  "♥": "♡"
+};
+
 glyphState = {
   'none' : '',
   '' : 'none'
@@ -43,7 +48,7 @@ function createMarkers(places) {
           var aWebsite = document.createElement('a');
           var urlIcon = document.createElement('img');
           var aUrl = document.createElement('a');
-          var photoImg = document.createElement('img');;
+          var photoImg = document.createElement('img');
           const hoursDiv = document.createElement('div');
           
           hoursDiv.className = "hours-div"
@@ -355,7 +360,7 @@ const likeRestaurant = (event, place) => {
     fetch("http://localhost:3000/likes", reqObj)
     .then(resp => resp.json())  
     .then(json => console.log(json))
-    event.target.innerHTML = "unlike"
+    event.target.innerHTML = "♥"
     likesRestIds.push(restObj.id)
   }
 }
@@ -444,7 +449,7 @@ const unLikeRestaurant = (likeObj, event) => {
   })
 
   console.log(likesRestIds);
-  event.target.innerHTML = "like"
+  event.target.innerHTML = "♡"
 
   likesRestIds = likesRestIds.filter(function(value){
     console.log("in filter", value, likeObj.id)
@@ -493,14 +498,17 @@ const toggleHiddenDiv = (event, place) => {
 
   const likeDiv = document.createElement('div')
   const likeBtn = document.createElement('button')
+  likeBtn.style.fontSize = '40px';
+  likeBtn.style.borderRadius = '10px';
+  likeBtn.style.outline = 'none';
   if (username === ""){
-    likeBtn.innerHTML = "like"
+    likeBtn.innerHTML = "♡"
   }
   else if (likesRestIds.includes(restObj.id)){
     console.log("in button assignment", likesRestIds, restObj.id)
-    likeBtn.innerHTML = 'unlike'
+    likeBtn.innerHTML = "♥"
   } else{
-    likeBtn.innerHTML = "like"
+    likeBtn.innerHTML = "♡"
   }
   likeBtn.id = `${divCount}-like-button`
   likeBtn.addEventListener("click", (event) => {
@@ -512,6 +520,8 @@ const toggleHiddenDiv = (event, place) => {
   })
 
   likeDiv.append(likeBtn)
+  likeDiv.style.textAlign = 'center'
+
   const commentsDiv = document.createElement('div')
   // commentsDiv.style.backgroundColor = "white"
   commentsDiv.style.height = '200px'
