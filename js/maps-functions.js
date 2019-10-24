@@ -122,6 +122,7 @@ function createMarkers(places) {
               likeBtn.innerHTML = "like"
             }
             else if (likesRestIds.includes(restObj.id)){
+              console.log("in button assignment", likesRestIds, restObj.id)
               likeBtn.innerHTML = 'unlike'
             } else{
               likeBtn.innerHTML = "like"
@@ -129,7 +130,7 @@ function createMarkers(places) {
             likeBtn.id = `${divCount}-like-button`
             likeBtn.addEventListener("click", (event) => {
               if (likesRestIds.includes(restObj.id)){
-                unLikeRestaurant(event, place)
+                getLikeId(event, place)
               } else{
                 likeRestaurant(event, place)
               }
@@ -427,13 +428,11 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       .then(resp => resp.json())  
       .then(json => console.log(json))
       event.target.innerHTML = "unlike"
+      likesRestIds.push(restObj.id)
     }
   }
 
-  const unLikeRestaurant = (event, place) => {
-    console.log(place)
-    console.log(globalUserObj.id)
-    console.log(restObj.id)
+  const getLikeId = (event, place) => {
     if (username === ""){
       Swal.fire({
         title: 'Enter Your Username',
@@ -477,8 +476,9 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       })
     }
     else{
+
       reqObj = {
-        method: "DELETE",
+        method: "POST",
         headers:{
           "Content-type": "application/json"
         },
@@ -488,10 +488,40 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
         })
       }
 
-      fetch(`http://localhost:3000/likes/${restObj.id}`, reqObj)
+      fetch(`http://localhost:3000/likes/`, reqObj)
       .then(resp => resp.json())  
-      .then(json => console.log(json))
-      event.target.innerHTML = "like"
-      likesRestIds.push(restObj.id)
+      .then(json => {
+        console.log(json)
+        unLikeRestaurant(json, event)
+      })
+  }
+}
+
+  const unLikeRestaurant = (likeObj, event) => {
+    reqObj = {
+      method: "DELETE",
+      headers:{
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify({
+        user_id: globalUserObj.id,
+        restaurant_id: restObj.id
+      })
     }
+
+    fetch(`http://localhost:3000/likes/${likeObj.id}`, reqObj)
+    .then(resp => resp.json())  
+    .then(json => {
+      console.log("deleted", json)
+    })
+
+    console.log(likesRestIds);
+    event.target.innerHTML = "like"
+
+    likesRestIds = likesRestIds.filter(function(value){
+      console.log("in filter", value, likeObj.id)
+      return value !== restObj.id;
+    });
+    console.log(likesRestIds);
+
   }
