@@ -212,8 +212,10 @@ const storeRestaurant = (event, restaurant, place) => {
 }
 
 const createComment = event =>{
-  const commentText = event.target.parentNode.children[2].value
-  const commentLog = event.target.parentNode.children[1]
+  const commentText = event.target.parentNode.children[0].value
+  event.target.parentNode.children[0].value = ""
+
+  const commentLog = event.target.parentNode.parentNode.children[6]
   console.log(username)
 
   if (username !== "" && commentText !== ""){
@@ -289,12 +291,13 @@ const createComment = event =>{
 const makeComment = commentObj =>{
   console.log('hi', commentObj)
   const p = document.createElement('p');
-  p.style.backgroundColor = '#333'
+  p.style.backgroundColor = '#B16E4B'
   p.style.border = '2px solid 333'
   p.style.borderRadius = '5px'
   p.style.margin ='18px'
   p.style.padding = '10px'
   p.style.textAlign = 'left'
+  p.style.color = "#FFF1E0"
   p.textContent = `${commentObj.username}: ${commentObj.content}`
   return p
 }
@@ -523,7 +526,8 @@ const toggleHiddenDiv = (event, place) => {
   likeDiv.style.textAlign = 'center'
 
   const commentsDiv = document.createElement('div')
-  // commentsDiv.style.backgroundColor = "white"
+  commentsDiv.className = "comments-div"
+  commentsDiv.style.backgroundColor = "#e9c4bc"
   commentsDiv.style.height = '200px'
   commentsDiv.style.overflowY = 'auto';
   const h2 = document.createElement('h2')
@@ -536,15 +540,10 @@ const toggleHiddenDiv = (event, place) => {
   // content.textContent = "No Comment"
   
   const commentText = document.createElement('textarea')
-  commentText.style.width = '300px'
-  commentText.style.display = 'block'
-  commentText.style.marginLeft = 'auto'
-  commentText.style.marginRight = 'auto'
+  commentText.className = "comment-text"
 
   const commentBtn = document.createElement('button');
-  commentBtn.style.display = 'block'
-  commentBtn.style.marginLeft = 'auto'
-  commentBtn.style.marginRight = 'auto'
+  commentBtn.className = "comment-button"
 
   commentBtn.addEventListener('click', (event) => {
     createComment(event);
@@ -552,10 +551,13 @@ const toggleHiddenDiv = (event, place) => {
   commentBtn.innerHTML = "Comment";
 
   // console.log(restObj)
+  const submitComment = document.createElement('div')
 
-  commentsDiv.append(h2, contentDiv, commentText, commentBtn)
+  submitComment.append(commentText, commentBtn);
 
-  div1.append(i, h2show, imgDivshow, iconsDivshow, p1, likeDiv, commentsDiv);
+  commentsDiv.append(h2, contentDiv);
+
+  div1.append(i, h2show, imgDivshow, iconsDivshow, p1, likeDiv, commentsDiv, submitComment);
 
 
   detailDiv.appendChild(div1);
