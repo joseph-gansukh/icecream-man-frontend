@@ -7,6 +7,7 @@ let restObj = {};
 let divCount = 0;
 
 function createMarkers(places) {
+  console.log("in create markers")
     var bounds = new google.maps.LatLngBounds();
     let place;
     var infoWindowContent;
@@ -22,7 +23,7 @@ function createMarkers(places) {
 
       var request = {
         placeId: place.place_id,
-        fields: ['website', 'formatted_phone_number', 'rating', 'name', 'url', 'photos', 'formatted_address', 'geometry', 'place_id']
+        fields: ['website', 'formatted_phone_number', 'rating', 'name', 'url', 'photos', 'formatted_address', 'geometry', 'place_id', 'price_level', 'opening_hours']
       }
 
       service = new google.maps.places.PlacesService(map);
@@ -43,7 +44,17 @@ function createMarkers(places) {
           var urlIcon = document.createElement('img');
           var aUrl = document.createElement('a');
           var photoImg = document.createElement('img');;
-          var br = document.createElement('br');
+          const hoursDiv = document.createElement('div');
+          
+          hoursDiv.className = "hours-div"
+
+          if (place.opening_hours.weekday_text !== undefined){
+            for (const hours of place.opening_hours.weekday_text){
+              const p = document.createElement('p');
+              p.textContent = hours
+              hoursDiv.append(p)
+            }
+          }
 
           photoImg.className = "ice-cream-list-pic"
           photoImg.src = place.photos[2].getUrl();
@@ -77,10 +88,11 @@ function createMarkers(places) {
           div.className = "ice-cream-list";
           p.textContent = place.formatted_address
           h2.textContent = `${place.name}`;
-          div.append(h2, imgDiv, iconsDiv, p);
+          div.append(h2, imgDiv, iconsDiv, p, hoursDiv);
           panel.appendChild(div);
 
           div.addEventListener('click', (event) => {
+            console.log("Place Details--------------------", place.opening_hours.weekday_text)
             createRestaurant(event, place);
           })
 
@@ -272,6 +284,12 @@ const createComment = event =>{
 const makeComment = commentObj =>{
   console.log('hi', commentObj)
   const p = document.createElement('p');
+  p.style.backgroundColor = '#333'
+  p.style.border = '2px solid 333'
+  p.style.borderRadius = '5px'
+  p.style.margin ='18px'
+  p.style.padding = '10px'
+  p.style.textAlign = 'left'
   p.textContent = `${commentObj.username}: ${commentObj.content}`
   return p
 }
@@ -508,8 +526,15 @@ const toggleHiddenDiv = (event, place) => {
   // content.textContent = "No Comment"
   
   const commentText = document.createElement('textarea')
-  
+  commentText.style.width = '300px'
+  commentText.style.display = 'block'
+  commentText.style.marginLeft = 'auto'
+  commentText.style.marginRight = 'auto'
+
   const commentBtn = document.createElement('button');
+  commentBtn.style.display = 'block'
+  commentBtn.style.marginLeft = 'auto'
+  commentBtn.style.marginRight = 'auto'
 
   commentBtn.addEventListener('click', (event) => {
     createComment(event);
