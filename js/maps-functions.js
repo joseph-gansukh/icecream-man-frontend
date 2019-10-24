@@ -504,6 +504,7 @@ const toggleHiddenDiv = (event, place) => {
   likeBtn.style.fontSize = '40px';
   likeBtn.style.borderRadius = '10px';
   likeBtn.style.outline = 'none';
+  likeBtn.style.marginBottom = '15px'
   if (username === ""){
     likeBtn.innerHTML = "♡"
   }
