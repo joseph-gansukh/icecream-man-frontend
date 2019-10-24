@@ -4,6 +4,8 @@
 }
 .topnav {
   background-image: url(https://media3.giphy.com/media/xT4uQmy4Ta0eg1T7W0/giphy.gif);
+  opacity: 0.7; 
+  filter: alpha(opacity=20);
 	z-index: 10000;
 	position: absolute;
 	top: 0px;
@@ -16,6 +18,8 @@
   width: 25px;
 }
 .topnav h1{
+  opacity: 1;
+  filter: alpha(opacity=20);
   margin: 0px;
   top: 8px;
   position: relative;
@@ -137,4 +141,7 @@ body {
   margin: 0;
   display: inline;
 
+}
+#details .ice-cream-list i:hover{
+  font-size: 3.5em;
 }

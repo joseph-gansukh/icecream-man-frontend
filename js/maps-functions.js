@@ -267,7 +267,8 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     const commentLog = event.target.parentNode.children[1]
     console.log(username)
 
-    if (username !== ""){
+    if (username !== "" && commentText !== ""){
+      console
       console.log(username)
       const reqObj = {
         method: "POST",
@@ -285,7 +286,7 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
       .then(resp => resp.json())
       .then(json => commentLog.append(makeComment(json)))
     }
-    else {
+    else if (username === ""){
       Swal.fire({
         title: 'Enter Your Username',
         input: 'text',
@@ -326,6 +327,13 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
             })
         }
     })
+    }
+    else if (commentText === ""){
+      Swal.fire({
+        type: 'error',
+        title: 'Oops...',
+        text: "You didn't write anything!?",
+      })
     }
   }
 
