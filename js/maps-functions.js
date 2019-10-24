@@ -138,21 +138,30 @@ function createMarkers(places) {
 
             likeDiv.append(likeBtn)
             const commentsDiv = document.createElement('div')
-            // commentsDiv.style.backgroundColor = "white"
+            // commentsDiv.style.backgroundColor = "#333"
             commentsDiv.style.height = '200px'
             commentsDiv.style.overflowY = 'auto';
             const h2 = document.createElement('h2')
             h2.style.color = "black"
             h2.innerText = "Comments:"
             const contentDiv = document.createElement('div')
+            // contentDiv.style.backgroundColor = "#333"
+
             console.log(restObj)
             contentDiv.id = `${divCount}-content-div`
             // content.style.color = 'black'
             // content.textContent = "No Comment"
             
             const commentText = document.createElement('textarea')
+            commentText.style.width = '300px'
+            commentText.style.display = 'block'
+            commentText.style.marginLeft = 'auto'
+            commentText.style.marginRight = 'auto'
             
             const commentBtn = document.createElement('button');
+            commentBtn.style.display = 'block'
+            commentBtn.style.marginLeft = 'auto'
+            commentBtn.style.marginRight = 'auto'
 
             commentBtn.addEventListener('click', (event) => {
               createComment(event);
@@ -363,6 +372,12 @@ function handleLocationError(browserHasGeolocation, infoWindow, pos) {
     console.log('hi', commentObj)
     const p = document.createElement('p');
     p.textContent = `${commentObj.username}: ${commentObj.content}`
+    p.style.backgroundColor = '#333'
+    p.style.border = '2px solid 333'
+    p.style.borderRadius = '5px'
+    p.style.margin ='18px'
+    p.style.padding = '10px'
+    p.style.textAlign = 'left'
     return p
   }
 
